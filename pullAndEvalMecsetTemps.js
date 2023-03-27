@@ -1,4 +1,7 @@
 import promptSync from 'prompt-sync';
+import * as fs from 'fs';
+import {Console} from "console";
+
 
 const prompt = promptSync();
 
@@ -24,4 +27,11 @@ const rawData = await getData();
 const body = JSON.parse(rawData.body);
 const items = body.Items;
 items.sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
-items.forEach(i => console.log(`${i.timestamp}, ${i.temp}`));
+
+const myLogger = new Console({
+    stdout: fs.createWriteStream("normalStdout.txt"),
+});
+
+items.forEach(i => {
+    myLogger.log(`${i.timestamp}, ${i.temp}`);
+});
